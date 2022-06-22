@@ -33,4 +33,4 @@ replace hlm-ipfs/x => github.com/hlm-ipfs/x v0.0.0-20211202054531-0de4aa04b33d
 
 replace github.com/libp2p/go-libp2p-quic-transport => github.com/hlm-ipfs/go-libp2p-quic-transport v0.17.1-0.20220615082203-5edd37755676
 
-replace github.com/ipfs/go-ipfs v0.13.0 => github.com/hlm-ipfs/go-ipfs v0.12.3-0.20220615082412-23ba82d701a7
+replace github.com/ipfs/go-ipfs  => github.com/hlm-ipfs/go-ipfs v0.12.3-0.20220615082412-23ba82d701a7
