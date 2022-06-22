@@ -12,6 +12,7 @@ import (
 	"context"
 	"encoding/gob"
 	"fmt"
+	"github.com/libp2p/go-libp2p-core/pnet"
 	"log"
 	"net"
 	"sync"
@@ -60,10 +61,17 @@ func NewNode(r *Repo, driver ProximityDriver) (*Node, error) {
 	default:
 		log.Printf("cannot enable BLE on an unsupported platform")
 	}
-
+	swarmkeyStr:=`/key/swarm/psk/1.0.0/
+/base16/
+bb4aadd159114ef377c35e0a8a63a3894bb54bcfb03a2c615fc61864caa49713`
+	swarmkey:=[]byte(swarmkeyStr)
+	psk, err := pnet.DecodeV1PSK(bytes.NewReader(swarmkey))
+	if err != nil {
+		return nil, err
+	}
 	ipfscfg := &ipfs_mobile.IpfsConfig{
 		HostConfig: &ipfs_mobile.HostConfig{
-			Options: []p2p.Option{bleOpt},
+			Options: []p2p.Option{bleOpt,p2p.PrivateNetwork(psk)},
 		},
 		RepoMobile: r.mr,
 		ExtraOpts: map[string]bool{
