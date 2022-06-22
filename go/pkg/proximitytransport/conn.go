@@ -3,6 +3,7 @@ package proximitytransport
 import (
 	"context"
 	"fmt"
+	"github.com/libp2p/go-libp2p-core/network"
 	"io"
 	"net"
 	"sync"
@@ -69,11 +70,13 @@ func newConn(ctx context.Context, t *proximityTransport, remoteMa ma.Multiaddr,
 	maconn.mp.addInputCache(maconn.cache)
 	maconn.mp.setOutput(pw)
 
+	dir := network.DirOutbound
 	// Returns an upgraded CapableConn (muxed, addr filtered, secured, etc...)
 	if inbound {
-		return t.upgrader.UpgradeInbound(ctx, t, maconn)
+		dir = network.DirInbound
 	}
-	return t.upgrader.UpgradeOutbound(ctx, t, maconn, remotePID)
+	scope, _ := t.rcMgr.OpenConnection(dir, false)
+	return (*t.upgrader).Upgrade(ctx, t, maconn, dir, remotePID, scope)
 }
 
 // Read reads data from the connection.

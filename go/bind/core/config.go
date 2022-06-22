@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	ipfs_config "github.com/ipfs/go-ipfs-config"
+	ipfs_config "github.com/ipfs/go-ipfs/config"
 	ipfs_common "github.com/ipfs/go-ipfs/repo/common"
 )
 

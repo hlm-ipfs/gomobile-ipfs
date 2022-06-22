@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/ipfs-shipyard/gomobile-ipfs/go/pkg/ble-driver"
-	ipfs_config "github.com/ipfs/go-ipfs-config"
+	ipfs_config "github.com/ipfs/go-ipfs/config"
 	libp2p_ci "github.com/libp2p/go-libp2p-core/crypto"
 	libp2p_peer "github.com/libp2p/go-libp2p-core/peer"
 )

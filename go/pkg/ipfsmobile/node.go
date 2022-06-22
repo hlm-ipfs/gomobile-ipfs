@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net"
 
-	ipfs_config "github.com/ipfs/go-ipfs-config"
 	ipfs_oldcmds "github.com/ipfs/go-ipfs/commands"
 	ipfs_core "github.com/ipfs/go-ipfs/core"
 	ipfs_corehttp "github.com/ipfs/go-ipfs/core/corehttp"
@@ -119,13 +118,6 @@ func NewNode(ctx context.Context, cfg *IpfsConfig) (*IpfsMobile, error) {
 		ReqLog:     &ipfs_oldcmds.ReqLog{},
 		ConstructNode: func() (*ipfs_core.IpfsNode, error) {
 			return inode, nil
-		},
-		LoadConfig: func(_ string) (*ipfs_config.Config, error) {
-			cfg, err := cfg.RepoMobile.Config()
-			if err != nil {
-				return nil, err
-			}
-			return cfg.Clone()
 		},
 	}
 

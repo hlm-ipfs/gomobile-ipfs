@@ -3,13 +3,14 @@ package proximitytransport
 import (
 	"context"
 	"fmt"
+	"github.com/libp2p/go-libp2p-core/network"
 	"sync"
 
 	host "github.com/libp2p/go-libp2p-core/host"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	pstore "github.com/libp2p/go-libp2p-core/peerstore"
 	tpt "github.com/libp2p/go-libp2p-core/transport"
-	tptu "github.com/libp2p/go-libp2p-transport-upgrader"
+	tptu "github.com/libp2p/go-libp2p-core/transport"
 	ma "github.com/multiformats/go-multiaddr"
 	mafmt "github.com/multiformats/go-multiaddr-fmt"
 	"github.com/pkg/errors"
@@ -48,6 +49,7 @@ type proximityTransport struct {
 	host     host.Host
 	upgrader *tptu.Upgrader
 
+	rcMgr    network.ResourceManager
 	connMap  sync.Map
 	cache    *RingBufferMap
 	lock     sync.RWMutex
@@ -74,6 +76,7 @@ func NewTransport(ctx context.Context, l *zap.Logger, driver ProximityDriver) fu
 		transport := &proximityTransport{
 			host:     h,
 			upgrader: u,
+			rcMgr:    network.NullResourceManager,
 			cache:    NewRingBufferMap(l, 128),
 			driver:   driver,
 			logger:   l,
