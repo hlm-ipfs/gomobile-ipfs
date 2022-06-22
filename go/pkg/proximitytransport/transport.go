@@ -47,9 +47,9 @@ type ProximityTransport interface {
 
 type proximityTransport struct {
 	host     host.Host
-	upgrader *tptu.Upgrader
+	upgrader tptu.Upgrader
 
-	rcMgr    network.ResourceManager
+	rcmgr    network.ResourceManager
 	connMap  sync.Map
 	cache    *RingBufferMap
 	lock     sync.RWMutex
@@ -59,7 +59,7 @@ type proximityTransport struct {
 	ctx      context.Context
 }
 
-func NewTransport(ctx context.Context, l *zap.Logger, driver ProximityDriver) func(h host.Host, u *tptu.Upgrader) (*proximityTransport, error) {
+func NewTransport(ctx context.Context, l *zap.Logger, driver ProximityDriver) func(h host.Host, u tptu.Upgrader, rcmgr network.ResourceManager) (*proximityTransport, error) {
 	if l == nil {
 		l = zap.NewNop()
 	}
@@ -71,12 +71,15 @@ func NewTransport(ctx context.Context, l *zap.Logger, driver ProximityDriver) fu
 		driver = &NoopProximityDriver{}
 	}
 
-	return func(h host.Host, u *tptu.Upgrader) (*proximityTransport, error) {
+	return func(h host.Host, u tptu.Upgrader, rcmgr network.ResourceManager) (*proximityTransport, error) {
 		l.Debug("NewTransport called", zap.String("driver", driver.ProtocolName()))
+		if rcmgr == nil {
+			rcmgr = network.NullResourceManager
+		}
 		transport := &proximityTransport{
 			host:     h,
 			upgrader: u,
-			rcMgr:    network.NullResourceManager,
+			rcmgr:    rcmgr,
 			cache:    NewRingBufferMap(l, 128),
 			driver:   driver,
 			logger:   l,

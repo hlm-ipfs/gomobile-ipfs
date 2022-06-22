@@ -75,8 +75,11 @@ func newConn(ctx context.Context, t *proximityTransport, remoteMa ma.Multiaddr,
 	if inbound {
 		dir = network.DirInbound
 	}
-	scope, _ := t.rcMgr.OpenConnection(dir, false)
-	return (*t.upgrader).Upgrade(ctx, t, maconn, dir, remotePID, scope)
+	scope, err := t.rcmgr.OpenConnection(dir, false)
+	if err != nil {
+		return nil, err
+	}
+	return t.upgrader.Upgrade(ctx, t, maconn, dir, remotePID, scope)
 }
 
 // Read reads data from the connection.
