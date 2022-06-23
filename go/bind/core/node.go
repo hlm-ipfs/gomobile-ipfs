@@ -13,8 +13,10 @@ import (
 	"encoding/gob"
 	"fmt"
 	"github.com/libp2p/go-libp2p-core/pnet"
+	"github.com/libp2p/go-libp2p/p2p/protocol/identify"
 	"log"
 	"net"
+	"os"
 	"sync"
 
 	ble "github.com/ipfs-shipyard/gomobile-ipfs/go/pkg/ble-driver"
@@ -30,7 +32,10 @@ import (
 	p2p "github.com/libp2p/go-libp2p"
 	// ipfs_log "github.com/ipfs/go-log"
 )
-
+func init()  {
+	identify.ActivationThresh=1
+	os.Setenv("QUIC_AESECB_KEY", "album_unwind_fret")
+}
 type Node struct {
 	listeners   []manet.Listener
 	muListeners sync.Mutex
