@@ -18,6 +18,7 @@ import (
 	"net"
 	"os"
 	"sync"
+	"time"
 
 	ble "github.com/ipfs-shipyard/gomobile-ipfs/go/pkg/ble-driver"
 	ipfs_mobile "github.com/ipfs-shipyard/gomobile-ipfs/go/pkg/ipfsmobile"
@@ -30,10 +31,18 @@ import (
 	ipfs_bs "github.com/ipfs/go-ipfs/core/bootstrap"
 	"github.com/libp2p/go-libp2p"
 	p2p "github.com/libp2p/go-libp2p"
+	libp2pquic "github.com/libp2p/go-libp2p-quic-transport"
+	"github.com/libp2p/go-libp2p/p2p/protocol/holepunch"
 	// ipfs_log "github.com/ipfs/go-log"
 )
 func init()  {
-	identify.ActivationThresh=1
+	identify.ActivationThresh = 1
+
+	holepunch.MaxRetries = 6
+	holepunch.DialTimeout = time.Second * 6
+	libp2pquic.HolePunchTimeout = time.Second * 6
+	libp2pquic.QuicConfig.HandshakeIdleTimeout = time.Second * 6
+	libp2pquic.QuicConfig.Tracer = qlog.NewTracer(libp2p.NewQuicTrace().Trace)
 	os.Setenv("QUIC_AESECB_KEY", "album_unwind_fret")
 }
 type Node struct {
