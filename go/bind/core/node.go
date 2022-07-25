@@ -42,7 +42,6 @@ func init()  {
 	holepunch.DialTimeout = time.Second * 6
 	libp2pquic.HolePunchTimeout = time.Second * 6
 	libp2pquic.QuicConfig.HandshakeIdleTimeout = time.Second * 6
-	libp2pquic.QuicConfig.Tracer = qlog.NewTracer(libp2p.NewQuicTrace().Trace)
 	os.Setenv("QUIC_AESECB_KEY", "album_unwind_fret")
 }
 type Node struct {
